@@ -7,7 +7,7 @@
   "homepage": "https://docs.gwop.io",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gwop-io/gwop-typescript.git"
+    "url": "git+https://github.com/gwop-io/gwop-node.git"
   },
   "keywords": [
     "gwop",

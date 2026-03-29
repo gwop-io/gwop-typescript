@@ -46,6 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Webhook validation (HMAC-SHA256)
 - x402 protocol support
 
-[0.2.0]: https://github.com/gwop-io/gwop-typescript/compare/v0.1.1...v0.2.0
-[0.1.1]: https://github.com/gwop-io/gwop-typescript/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/gwop-io/gwop-typescript/releases/tag/v0.1.0
+[0.2.0]: https://github.com/gwop-io/gwop-node/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/gwop-io/gwop-node/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/gwop-io/gwop-node/releases/tag/v0.1.0
