@@ -16,9 +16,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
-          registry-url: https://registry.npmjs.org
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: node -v
+      - run: npm -v
 
       - run: npm ci
       - run: npm run build
@@ -34,4 +37,4 @@ jobs:
             exit 1
           fi
 
-      - run: npm publish --provenance --access public
+      - run: npm publish --access public
