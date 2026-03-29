@@ -5,6 +5,12 @@ All notable changes to `@gwop/sdk` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-03-29
+
+### Fixed
+- Repository URL for npm OIDC trusted publishing
+- Repo renamed from `gwop-typescript` to `gwop-node`
+
 ## [0.2.0] - 2026-03-29
 
 ### Added
@@ -46,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Webhook validation (HMAC-SHA256)
 - x402 protocol support
 
+[0.2.1]: https://github.com/gwop-io/gwop-node/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/gwop-io/gwop-node/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/gwop-io/gwop-node/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/gwop-io/gwop-node/releases/tag/v0.1.0
