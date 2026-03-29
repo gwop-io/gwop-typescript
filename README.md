@@ -55,6 +55,13 @@ bun add @gwop/sdk
 
 ## Quick start
 
+Add your credentials to `.env` — find these in your [merchant dashboard](https://merchant.gwop.io) under **Settings**:
+
+```bash
+GWOP_MERCHANT_API_KEY=sk_m_...   # Settings → API Keys → + Create
+GWOP_WEBHOOK_SECRET=whsec_...    # Settings → Webhook Configuration → Secret
+```
+
 ```typescript
 import { Gwop } from "@gwop/sdk";
 
