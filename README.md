@@ -114,7 +114,7 @@ Your backend calls these endpoints with `sk_m_*` keys. Agents never talk to Gwop
 ## Webhooks
 
 ```typescript
-const gwop = new Gwop({ webhookSecret: process.env.GWOP_WEBHOOK_SECRET });
+const gwop = new Gwop(); // reads GWOP_WEBHOOK_SECRET from env
 
 const event = await gwop.validateWebhook({
   request: {
@@ -199,7 +199,7 @@ try {
 ```typescript
 const gwop = new Gwop({
   merchantApiKey: "sk_m_...",   // or set GWOP_MERCHANT_API_KEY env var
-  webhookSecret: "whsec_...",   // required for validateWebhook()
+  webhookSecret: "whsec_...",   // or set GWOP_WEBHOOK_SECRET env var
   timeoutMs: 30_000,            // request timeout
   debugLogger: console,         // or set GWOP_DEBUG=true
 });
