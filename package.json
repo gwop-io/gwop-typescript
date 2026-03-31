@@ -82,7 +82,7 @@
     "lint:fix": "biome check --write .",
     "format:check": "biome format .",
     "format": "biome format --write .",
-    "test": "tsx tests/01-invoices-create.ts && tsx tests/02-invoices-list.ts && tsx tests/03-invoices-get.ts && tsx tests/04-invoices-cancel.ts && tsx tests/05-auth-create-intent.ts && tsx tests/06-auth-exchange.ts && tsx tests/07-auth-jwks.ts && tsx tests/08-auth-sessions.ts && tsx tests/09-webhooks.ts && tsx tests/10-errors.ts",
+    "test": "tsx tests/01-invoices-create.ts && tsx tests/02-invoices-list.ts && tsx tests/03-invoices-get.ts && tsx tests/04-invoices-cancel.ts && tsx tests/05-auth-create-intent.ts && tsx tests/06-auth-exchange.ts && tsx tests/07-auth-jwks.ts && tsx tests/08-auth-sessions.ts && tsx tests/09-webhooks.ts && tsx tests/10-errors.ts && tsx tests/11-webhook-secret-env.ts",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
