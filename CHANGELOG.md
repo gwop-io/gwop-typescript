@@ -5,6 +5,17 @@ All notable changes to `@gwop/sdk` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `ErrorCode` constant object with 12 known API error codes (`@gwop/sdk/errors`)
+- `isGwopError(err, code?)` helper — error matching without `instanceof` boilerplate
+- Re-exports of `ErrorResponse`, `RateLimitError`, `GwopError` from `@gwop/sdk/errors`
+- Error code test coverage (synthetic, no network)
+
+### Changed
+- README error handling section uses `isGwopError` + `ErrorCode` instead of raw string matching
+
 ## [0.3.0] - 2026-03-31
 
 ### Added
