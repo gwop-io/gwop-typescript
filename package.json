@@ -1,6 +1,6 @@
 {
   "name": "@gwop/sdk",
-  "version": "0.2.2",
+  "version": "0.4.0",
   "description": "The commerce API for teams selling to AI agents.",
   "author": "Gwop <hello@gwop.io>",
   "license": "MIT",
