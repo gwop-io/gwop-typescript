@@ -168,31 +168,53 @@ switch (event.body.eventType) {
 
 ## Errors
 
-All errors use `UPPER_SNAKE_CASE` codes. Build your error handling against codes, not HTTP status or message strings — codes are stable across SDK versions.
+All errors use `UPPER_SNAKE_CASE` codes. The SDK exports constants and a helper so you never need to string-match:
 
 ```typescript
-import * as errors from "@gwop/sdk/models/errors";
+import { ErrorCode, isGwopError } from "@gwop/sdk/errors";
 
 try {
-  await gwop.invoices.create({ /* ... */ });
-} catch (error) {
-  if (error instanceof errors.ErrorResponse) {
-    console.log(error.data$.error.code);   // "VALIDATION_ERROR"
-    console.log(error.data$.error.message); // Human-readable description
-    console.log(error.statusCode);          // 400
+  await gwop.invoices.get({ id: "inv_missing" });
+} catch (err) {
+  if (isGwopError(err, ErrorCode.InvoiceNotFound)) {
+    // handle missing invoice
   }
+
+  if (isGwopError(err, ErrorCode.RateLimited)) {
+    // back off and retry
+  }
+
+  if (isGwopError(err)) {
+    // any SDK HTTP error — access statusCode, headers, body
+    console.log(err.statusCode);
+  }
+}
+```
+
+For manual access without the helper:
+
+```typescript
+import { ErrorCode, ErrorResponse } from "@gwop/sdk/errors";
+
+if (err instanceof ErrorResponse && err.error.code === ErrorCode.InvoiceNotFound) {
+  // ...
 }
 ```
 
 | Code | Status | Meaning |
 |------|--------|---------|
-| `UNAUTHORIZED` | 401 | Invalid, revoked, or missing API key |
-| `VALIDATION_ERROR` | 400 | Request body failed validation |
-| `INVOICE_NOT_FOUND` | 404 | Invoice doesn't exist or not visible to this merchant |
-| `INVOICE_CANCEL_NOT_ALLOWED` | 400 | Cannot cancel — invoice is not `OPEN` |
-| `AUTH_INTENT_NOT_SETTLED` | 402 | Agent hasn't paid the auth challenge yet |
-| `IDEMPOTENCY_CONFLICT` | 409 | Idempotency key reused with different parameters |
-| `RATE_LIMITED` | 429 | Too many requests — check `Retry-After` header |
+| `ErrorCode.Unauthorized` | 401 | Invalid, revoked, or missing API key |
+| `ErrorCode.Forbidden` | 403 | Valid key but merchant account not active |
+| `ErrorCode.ValidationError` | 400 | Request body failed validation |
+| `ErrorCode.InvoiceNotFound` | 404 | Invoice doesn't exist or not visible to this merchant |
+| `ErrorCode.InvoiceCancelNotAllowed` | 400 | Cannot cancel — invoice is not `OPEN` |
+| `ErrorCode.AuthIntentNotSettled` | 402 | Agent hasn't paid the auth challenge yet |
+| `ErrorCode.AuthIntentNotFound` | 404 | Auth intent doesn't exist |
+| `ErrorCode.AuthIntentExpired` | 409 | Auth intent TTL exceeded — create a new one |
+| `ErrorCode.AuthIntentUsed` | 409 | Auth intent already exchanged for a JWT |
+| `ErrorCode.SessionNotFound` | 404 | Session doesn't exist |
+| `ErrorCode.IdempotencyConflict` | 409 | Idempotency key reused with different parameters |
+| `ErrorCode.RateLimited` | 429 | Too many requests — check `Retry-After` header |
 
 ## Configuration
 
