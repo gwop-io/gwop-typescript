@@ -174,6 +174,39 @@ async function main() {
     "isGwopError(htmlError, ErrorCode.RateLimited) === false (non-JSON body)",
   );
 
+  // --- Test 10: .error property availability after isGwopError ---
+  console.log("\n--- Test 10: .error availability differs by error class ---");
+
+  // ErrorResponse has .error — structured path
+  const structuredErr = fakeErrorResponse("VALIDATION_ERROR", "Bad request", 400);
+  assert(isGwopError(structuredErr, ErrorCode.ValidationError), "structured: isGwopError matches");
+  assert("error" in structuredErr, "structured: .error property exists");
+  assert(structuredErr.error.code === "VALIDATION_ERROR", "structured: .error.code accessible");
+
+  // GwopDefaultError does NOT have .error — fallback path
+  const fallbackErr = fakeDefaultError(
+    400,
+    JSON.stringify({ error: { code: "VALIDATION_ERROR", message: "Bad request" } }),
+  );
+  assert(isGwopError(fallbackErr, ErrorCode.ValidationError), "fallback: isGwopError matches");
+  assert(!("error" in fallbackErr), "fallback: .error property does NOT exist");
+
+  // Prove that accessing .error.code on fallback path throws
+  let fallbackCrashed = false;
+  try {
+    // @ts-expect-error — this is the exact mistake the docs were making
+    const _code = (fallbackErr as any).error.code;
+  } catch {
+    fallbackCrashed = true;
+  }
+  assert(fallbackCrashed, "fallback: .error.code throws TypeError");
+
+  // Both share the GwopError contract — statusCode, headers, body always work
+  assert(structuredErr.statusCode === 400, "structured: .statusCode works");
+  assert(fallbackErr.statusCode === 400, "fallback: .statusCode works");
+  assert(typeof structuredErr.body === "string", "structured: .body works");
+  assert(typeof fallbackErr.body === "string", "fallback: .body works");
+
   // --- Summary ---
   console.log(`\n=== ${passed} passed, ${failed} failed ===`);
   if (failed > 0) process.exit(1);
