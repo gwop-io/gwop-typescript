@@ -84,6 +84,12 @@ export async function validateWebhook(
   for (const schema of knownSchemas) {
     const ret = schema(combined);
     if (ret.ok) {
+      // Reject payloads where critical fields were coerced to empty string
+      // by the permissive types.string() parser (e.g. missing from wire payload).
+      const data = ret.value.body.data;
+      if (!data.invoiceId || !data.publicInvoiceId || !data.merchantId) {
+        continue;
+      }
       return ret;
     }
   }

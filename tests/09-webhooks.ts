@@ -262,6 +262,89 @@ async function main() {
   } catch (err: any) {
     console.log("FAILED:", err.message);
   }
+  // --- Test 9: Missing public_invoice_id field ---
+  console.log("\n--- Missing public_invoice_id ---");
+  const missingFieldBody = JSON.stringify({
+    event_type: "invoice.paid",
+    event_id: "evt_test_009",
+    data: {
+      invoice_id: "inv_7dbeeaad8ebf4f5298c380c90e4b3576",
+      // public_invoice_id intentionally omitted
+      merchant_id: "9e9c9ba5-3bab-4172-8a79-336f9ca0f163",
+      status: "PAID",
+      amount_usdc: "1025000",
+      currency: "USDC",
+      tx_hash: "0xcd2688e1636de50f283933bd08b849dc6aef51ea9600521bc5f2de409897ad47",
+      payment_chain: "base",
+      payment_chain_caip2: "eip155:8453",
+      paid_at: "2026-03-24T00:48:31.602Z",
+      payer_wallet: "0x742d35Cc6634C0532925a3b844Bc9e7595f5bA16",
+    },
+  });
+  const missingTs = Math.floor(Date.now() / 1000);
+  const missingSig = signPayload(missingFieldBody, missingTs);
+  try {
+    await gwop.validateWebhook({
+      request: {
+        body: missingFieldBody,
+        headers: {
+          "x-gwop-signature": missingSig,
+          "x-gwop-event-id": "evt_test_009",
+          "x-gwop-event-type": "invoice.paid",
+          "content-type": "application/json",
+        },
+        url: "https://api.example.com/webhooks/gwop",
+        method: "POST",
+      },
+    });
+    console.log("FAIL — should have rejected missing public_invoice_id");
+    process.exit(1);
+  } catch (err: any) {
+    console.log("Error:", err.message);
+    console.log("PASS — missing public_invoice_id rejected");
+  }
+
+  // --- Test 10: Missing invoice_id field ---
+  console.log("\n--- Missing invoice_id ---");
+  const missingInvoiceIdBody = JSON.stringify({
+    event_type: "invoice.paid",
+    event_id: "evt_test_010",
+    data: {
+      // invoice_id intentionally omitted
+      public_invoice_id: "inv_7dbeeaad8ebf4f5298c380c90e4b3576",
+      merchant_id: "9e9c9ba5-3bab-4172-8a79-336f9ca0f163",
+      status: "PAID",
+      amount_usdc: "1025000",
+      currency: "USDC",
+      tx_hash: "0xcd2688e1636de50f283933bd08b849dc6aef51ea9600521bc5f2de409897ad47",
+      payment_chain: "base",
+      payment_chain_caip2: "eip155:8453",
+      paid_at: "2026-03-24T00:48:31.602Z",
+      payer_wallet: "0x742d35Cc6634C0532925a3b844Bc9e7595f5bA16",
+    },
+  });
+  const missingInvTs = Math.floor(Date.now() / 1000);
+  const missingInvSig = signPayload(missingInvoiceIdBody, missingInvTs);
+  try {
+    await gwop.validateWebhook({
+      request: {
+        body: missingInvoiceIdBody,
+        headers: {
+          "x-gwop-signature": missingInvSig,
+          "x-gwop-event-id": "evt_test_010",
+          "x-gwop-event-type": "invoice.paid",
+          "content-type": "application/json",
+        },
+        url: "https://api.example.com/webhooks/gwop",
+        method: "POST",
+      },
+    });
+    console.log("FAIL — should have rejected missing invoice_id");
+    process.exit(1);
+  } catch (err: any) {
+    console.log("Error:", err.message);
+    console.log("PASS — missing invoice_id rejected");
+  }
 }
 
 main().catch((err) => {
